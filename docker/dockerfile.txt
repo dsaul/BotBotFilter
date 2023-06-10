@@ -17,6 +17,13 @@ WORKDIR /app
 # STAGE 3 - Package
 FROM mcr.microsoft.com/dotnet/aspnet:7.0 as final
 
+# Add packages we need.
+RUN apt-get update && apt-get install -y \
+	bash \
+	iputils-ping \
+	&& rm -rf /var/lib/apt/lists/*
+
+
 # http
 EXPOSE 6650/tcp
 
