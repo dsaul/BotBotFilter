@@ -1,9 +1,6 @@
-using Amazon.S3;
 using DanSaul.SharedCode.CardDAV;
 using DanSaul.SharedCode.Mongo;
-using DanSaul.SharedCode.StandardizedEnvironmentVariables;
 using Serilog;
-using Serilog.Events;
 using System.Net;
 
 namespace TwilioCallScreening
@@ -16,14 +13,13 @@ namespace TwilioCallScreening
 		{
 			Log.Logger = new LoggerConfiguration()
 				.MinimumLevel.Debug()
-				.MinimumLevel.Override("Microsoft", LogEventLevel.Debug)
-				.MinimumLevel.Override("Microsoft.AspNetCore", LogEventLevel.Debug)
 				.WriteTo.Console()
 				.CreateLogger();
 
 
 
 			WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
+			builder.WebHost.UseUrls("http://*:6650/");
 
 			builder.Host.UseSerilog((HostBuilderContext ctx, LoggerConfiguration lc) =>
 			{

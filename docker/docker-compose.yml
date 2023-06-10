@@ -1,0 +1,24 @@
+#docker build --no-cache --progress=plain -f dockerfile.txt ../
+version: '2.0'
+services:
+  botbotfilter:
+    build:
+      context: ../
+      dockerfile: ./docker/dockerfile.txt
+    container_name: botbotfilter
+    image: maskawanian/botbotfilter:latest
+    restart: always
+    ports:
+     - '6650:6650'
+    environment:
+     - TZ=America/Winnipeg
+     - ASPNETCORE_ENVIRONMENT=Development
+     - CALDAV_URI=https://xxxxx/dav.php/addressbooks/xxxxx@baikal.xxxxx/default/
+     - CALDAV_AUTH_TYPE=Digest
+     - CALDAV_USER_NAME=xxxxx@baikal.xxxxx
+     - CALDAV_PASSWORD=
+     - FORWARD_E164=+12045551234
+     - SND_URI_INTRO=https://xxxxx/twilio/intro.mp3
+     - SND_URI_NUMBER_PATTERN=https://xxxxx/twilio/{0}.mp3
+     - SND_URI_NO_RESPONSE_GOOD_BYE=https://xxxxx/twilio/no-response-goodbye.mp3
+     - SND_URI_NOT_CORRECT_GOOD_BYE=https://xxxxx/twilio/not-correct-goodbye.mp3

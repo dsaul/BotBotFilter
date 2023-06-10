@@ -1,0 +1,32 @@
+# Stage 1 - api & web server
+FROM mcr.microsoft.com/dotnet/sdk:7.0 AS backend
+
+# Add packages we need.
+RUN apt-get update && apt-get install -y \
+	bash \
+	&& rm -rf /var/lib/apt/lists/*
+RUN mkdir -p /app
+ADD ./backend /source
+
+WORKDIR /source/BotBotFilter
+RUN dotnet restore && dotnet publish --output /app --configuration Debug
+
+WORKDIR /app
+#RUN ls -laR
+
+# STAGE 3 - Package
+FROM mcr.microsoft.com/dotnet/aspnet:7.0 as final
+
+# http
+EXPOSE 6650/tcp
+
+# Data Protection Keys
+VOLUME /root/.aspnet/DataProtection-Keys
+
+WORKDIR /app
+COPY --from=backend /app .
+#ENTRYPOINT ["dotnet", "BotBotFilter.dll"]
+
+RUN ls -la
+
+CMD ["dotnet", "BotBotFilter.dll"]
